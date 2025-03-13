@@ -1,8 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #424242;
+  --form-border-color: #9f9ea0;
+  --input-border-color-active: #424242;
+  --input-border-color: #bdbdbd;
+  --label-inactive-color: #757575;
 }
 
 @theme inline {
@@ -23,4 +27,28 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.border-color-form {
+  border-color: var(--form-border-color);
+}
+
+.border-color-input-active {
+  border-color: var(--input-border-color-active);
+}
+
+.border-color-input {
+  border-color: var(--input-border-color);
+}
+
+.text-label-inactive {
+  color: var(--label-inactive-color);
+}
+
+.inp-default {
+  color: var(--label-inactive-color);
+}
+
+.inp-default:focus {
+  color: var(--foreground);
 }
