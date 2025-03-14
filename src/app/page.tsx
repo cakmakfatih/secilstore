@@ -1,10 +1,10 @@
-import CenteredLayout from '@/client/layouts/CenteredLayout';
-import LoginForm from '@/client/shared/LoginForm';
+import { getSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
-export default function Home() {
-  return (
-    <CenteredLayout>
-      <LoginForm />
-    </CenteredLayout>
-  );
+export default async function Home() {
+  const session = await getSession();
+
+  if (!session) {
+    redirect('/login');
+  }
 }
