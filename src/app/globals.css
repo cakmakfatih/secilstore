@@ -52,3 +52,9 @@ body {
 .inp-default:focus {
   color: var(--foreground);
 }
+
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}

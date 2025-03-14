@@ -14,9 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
-      <body className={`${poppins.className} antialiased absolute min-w-screen h-screen`}>
-        {children}
-      </body>
+      <body className={`${poppins.className} antialiased absolute w-dvw h-dvh`}>{children}</body>
     </html>
   );
 }
