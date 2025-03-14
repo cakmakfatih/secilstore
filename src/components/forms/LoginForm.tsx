@@ -6,7 +6,7 @@ import Checkbox from '../shared/Checkbox';
 
 export default function LoginForm() {
   return (
-    <div className="border-color-form lg:border rounded-md flex-1 self lg:max-w-[792px] lg:max-h-[867px] h-[100%] w-[80%] flex self-center items-center justify-center flex-col">
+    <div className="border-color-form lg:border rounded-md flex-1 self lg:max-w-[792px] lg:max-h-[867px] lg:h-[85%] w-[80%] flex self-center items-center justify-center flex-col">
       <div className="flex-[2] hidden lg:block" />
       <div className="flex-[1] flex justify-center items-center">
         <Image
