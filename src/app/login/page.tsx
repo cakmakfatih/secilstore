@@ -1,6 +1,6 @@
 'use server';
 
-import LoginForm from '@/components/pages/LoginForm';
+import LoginForm from '@/components/forms/LoginForm';
 
 export default async function Login() {
   return <LoginForm />;
