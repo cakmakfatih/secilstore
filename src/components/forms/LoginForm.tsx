@@ -13,7 +13,7 @@ export default function LoginForm() {
           src="./logo.svg"
           width={256}
           height={256}
-          className="w-[164px] lg:w-[256px] h-auto"
+          className="w-[196px] lg:w-[256px] h-auto"
           alt="logo"
         />
       </div>
