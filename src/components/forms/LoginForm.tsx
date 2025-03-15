@@ -7,11 +7,12 @@ import TextInput from '../shared/TextInput';
 import Checkbox from '../shared/Checkbox';
 import { signIn } from 'next-auth/react';
 import { ChangeEvent } from 'react';
-import { redirect } from 'next/navigation';
 import { useLoginStore } from '@/providers/LoginStoreProvider';
 import { isGeneralError, isInvalidFieldsError } from '@/lib/helpers';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
+  const router = useRouter();
   const {
     username,
     password,
@@ -35,7 +36,8 @@ export default function LoginForm() {
     });
 
     if (!authResult?.error) {
-      redirect('/collections');
+      router.push('/collections');
+      return;
     }
 
     const errParsed = JSON.parse(authResult.error);

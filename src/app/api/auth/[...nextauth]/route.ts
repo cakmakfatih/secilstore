@@ -78,11 +78,8 @@ export const authOptions: NextAuthOptions = {
     maxAge: 36000,
   },
   pages: {
-    signIn: '/',
+    signIn: '/login',
     signOut: '/',
-    error: '/',
-    verifyRequest: '/',
-    newUser: '/',
   },
   callbacks: {
     async session({ session, token }) {
