@@ -1,24 +1,15 @@
-import {
-  InvalidCredentialsError,
-  InvalidCredentialsResponse,
-  InvalidFieldsError,
-  InvalidFieldsResponse,
-} from '@/libs/errors';
 import { jwtDecode } from 'jwt-decode';
-import NextAuth, { AuthValidity, NextAuthOptions, Tokens, UserObject } from 'next-auth';
+import NextAuth, {
+  AuthValidity,
+  InvalidCredentialsResponse,
+  InvalidFieldsResponse,
+  NextAuthOptions,
+  SuccessResponse,
+  Tokens,
+  UserObject,
+} from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
-
-interface SuccessResponse {
-  status: number;
-  message: string | null;
-  data: {
-    accessToken: string;
-    expiresIn: number;
-    refreshExpiresIn: number;
-    refreshToken: string;
-  };
-}
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -45,14 +36,16 @@ export const authOptions: NextAuthOptions = {
           }),
         });
 
-        if (response.status === 400) {
-          const result: InvalidFieldsResponse = await response.json();
-          throw new InvalidFieldsError(result);
-        } else if (response.status === 406) {
-          const result: InvalidCredentialsResponse = await response.json();
-          throw new InvalidCredentialsError(result);
-        } else if (!response.ok) {
-          throw new Error('Beklenmedik bir hata oluştu.');
+        if (!response.ok) {
+          if (response.status === 400) {
+            const result: InvalidFieldsResponse = await response.json();
+            throw new Error(JSON.stringify(result));
+          } else if (response.status === 406) {
+            const result: InvalidCredentialsResponse = await response.json();
+            throw new Error(JSON.stringify(result));
+          } else {
+            throw new Error('Beklenmedik bir hata oluştu.');
+          }
         }
 
         const result: SuccessResponse = await response.json();
@@ -83,14 +76,18 @@ export const authOptions: NextAuthOptions = {
     maxAge: 36000,
   },
   pages: {
-    signIn: '/login',
-    signOut: '/logout',
+    signIn: '/',
+    signOut: '/',
+    error: '/',
+    verifyRequest: '/',
+    newUser: '/',
   },
   callbacks: {
     async session({ session, token }) {
       session.user = token.data.user;
       session.validity = token.data.validity;
       session.error = token.error;
+
       return session;
     },
     async jwt({ token, user, account }) {
@@ -107,6 +104,12 @@ export const authOptions: NextAuthOptions = {
       }
 
       return { ...token, error: 'RefreshTokenExpired' };
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+
+      return baseUrl;
     },
   },
 };

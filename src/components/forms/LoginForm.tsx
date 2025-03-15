@@ -7,19 +7,23 @@ import TextInput from '../shared/TextInput';
 import Checkbox from '../shared/Checkbox';
 import { signIn } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
+import { redirect } from 'next/navigation';
 
 export default function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await signIn('credentials', {
+
+    const authResult = await signIn('credentials', {
       username,
       password,
       redirect: false,
     });
 
-    console.log(result);
+    if (!authResult?.error) {
+      redirect('/collections');
+    }
   };
 
   return (
@@ -44,7 +48,8 @@ export default function LoginForm() {
           value={username}
           name="username"
           placeholder="E-Posta"
-          type="email"
+          type="text"
+          required={true}
           autoComplete="off"
         />
         <Seperator />
@@ -53,7 +58,8 @@ export default function LoginForm() {
           value={password}
           name="password"
           placeholder="Şifre"
-          type="password"
+          type="email"
+          required={true}
           autoComplete="off"
         />
         <Seperator />

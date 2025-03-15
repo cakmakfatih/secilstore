@@ -30,7 +30,45 @@ declare module 'next-auth' {
     user: UserObject;
     validity: AuthValidity;
     tokens: Tokens;
-    error?: string;
+    error?: SuccessResponse | InvalidFieldsResponse | InvalidCredentialsResponse | string;
+  }
+
+  interface SuccessResponse {
+    status: number;
+    message: string | null;
+    data: {
+      accessToken: string;
+      expiresIn: number;
+      refreshExpiresIn: number;
+      refreshToken: string;
+    };
+  }
+
+  interface InvalidCredentialsResponse extends Error {
+    status: number;
+    message: string;
+    request: string;
+    method: string;
+  }
+
+  interface InvalidFieldsResponse extends Error {
+    status: number;
+    message: string;
+    data: {
+      errors: {
+        Username?: string[];
+        Password?: string[];
+      };
+    };
+  }
+}
+
+declare module 'next-auth/react' {
+  interface SignInResponse {
+    ok: boolean;
+    error: InvalidCredentialsResponse | InvalidFieldsResponse | string | null;
+    status: number;
+    url: string;
   }
 }
 
