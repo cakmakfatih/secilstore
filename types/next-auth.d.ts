@@ -6,10 +6,12 @@ declare module 'next-auth' {
     access: string;
     refresh: string;
   }
+
   interface AuthValidity {
     valid_until: number;
     refresh_until: number;
   }
+
   interface UserObject {
     name: string;
     preferred_username: string;

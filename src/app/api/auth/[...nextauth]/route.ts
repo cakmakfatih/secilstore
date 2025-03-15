@@ -1,9 +1,17 @@
+import {
+  InvalidCredentialsError,
+  InvalidCredentialsResponse,
+  InvalidFieldsError,
+  InvalidFieldsResponse,
+} from '@/libs/errors';
 import { jwtDecode } from 'jwt-decode';
-import NextAuth, { AuthValidity, NextAuthOptions, Tokens, User, UserObject } from 'next-auth';
+import NextAuth, { AuthValidity, NextAuthOptions, Tokens, UserObject } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-interface LoginResponse {
+interface SuccessResponse {
+  status: number;
+  message: string | null;
   data: {
     accessToken: string;
     expiresIn: number;
@@ -13,6 +21,7 @@ interface LoginResponse {
 }
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -36,11 +45,18 @@ export const authOptions: NextAuthOptions = {
           }),
         });
 
-        if (!response.ok) {
-          return null;
+        if (response.status === 400) {
+          const result: InvalidFieldsResponse = await response.json();
+          throw new InvalidFieldsError(result);
+        } else if (response.status === 406) {
+          const result: InvalidCredentialsResponse = await response.json();
+          throw new InvalidCredentialsError(result);
+        } else if (!response.ok) {
+          throw new Error('Beklenmedik bir hata oluştu.');
         }
 
-        const result: LoginResponse = await response.json();
+        const result: SuccessResponse = await response.json();
+
         const { accessToken, refreshToken, expiresIn, refreshExpiresIn } = result.data;
         const user: UserObject = jwtDecode(accessToken);
 
