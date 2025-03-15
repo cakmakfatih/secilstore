@@ -1,10 +1,12 @@
-import CenteredLayout from '@/client/layouts/CenteredLayout';
-import LoginForm from '@/client/shared/LoginForm';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { authOptions } from './api/auth/[...nextauth]/route';
 
-export default function Home() {
-  return (
-    <CenteredLayout>
-      <LoginForm />
-    </CenteredLayout>
-  );
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect('/login');
+  }
+
+  redirect('/collections');
 }
