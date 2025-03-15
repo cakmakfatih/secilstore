@@ -54,6 +54,7 @@ export class InvalidFieldsError extends Error implements InvalidFieldsResponse {
 
   constructor({ status, message, data }: InvalidFieldsResponse) {
     super(message);
+
     this.status = status;
     this.message = message;
     this.data = data;
