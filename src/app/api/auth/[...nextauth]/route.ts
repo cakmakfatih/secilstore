@@ -103,7 +103,6 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (Date.now() < token.data.validity.refresh_until) {
-        console.debug('Access token is being refreshed');
         return await refreshAccessToken(token);
       }
 
