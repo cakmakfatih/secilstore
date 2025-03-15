@@ -8,10 +8,11 @@ import Checkbox from '../shared/Checkbox';
 import { signIn } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
 import { redirect } from 'next/navigation';
+import { useLoginStore } from '@/providers/LoginStoreProvider';
 
 export default function LoginForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { username, password, setUsername, setPassword } = useLoginStore(state => state);
+
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -23,6 +24,8 @@ export default function LoginForm() {
 
     if (!authResult?.error) {
       redirect('/collections');
+    } else {
+      console.log(JSON.parse(authResult.error));
     }
   };
 
@@ -48,7 +51,7 @@ export default function LoginForm() {
           value={username}
           name="username"
           placeholder="E-Posta"
-          type="text"
+          type="email"
           required={true}
           autoComplete="off"
         />
@@ -58,7 +61,7 @@ export default function LoginForm() {
           value={password}
           name="password"
           placeholder="Şifre"
-          type="email"
+          type="password"
           required={true}
           autoComplete="off"
         />

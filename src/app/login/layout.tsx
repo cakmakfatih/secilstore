@@ -1,4 +1,4 @@
-import CenteredLayout from '@/components/layouts/CenteredLayout';
+import LoginStoreProvider from '@/providers/LoginStoreProvider';
 import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'SecilStore - Login',
@@ -10,5 +10,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <CenteredLayout>{children}</CenteredLayout>;
+  return <LoginStoreProvider>{children}</LoginStoreProvider>;
 }
