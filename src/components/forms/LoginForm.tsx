@@ -6,14 +6,27 @@ import Seperator from '../shared/Seperator';
 import TextInput from '../shared/TextInput';
 import Checkbox from '../shared/Checkbox';
 import { signIn } from 'next-auth/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { redirect } from 'next/navigation';
+import { useLoginStore } from '@/providers/LoginStoreProvider';
+import { isGeneralError, isInvalidFieldsError } from '@/lib/helpers';
 
 export default function LoginForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    username,
+    password,
+    error,
+    isLoading,
+    setUsername,
+    setPassword,
+    setFieldErrors,
+    setGeneralError,
+    setIsLoading,
+  } = useLoginStore(state => state);
+
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const authResult = await signIn('credentials', {
       username,
@@ -24,6 +37,16 @@ export default function LoginForm() {
     if (!authResult?.error) {
       redirect('/collections');
     }
+
+    const errParsed = JSON.parse(authResult.error);
+
+    if (isGeneralError(errParsed)) {
+      setGeneralError(errParsed.message);
+    } else if (isInvalidFieldsError(errParsed)) {
+      setFieldErrors(errParsed);
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -43,14 +66,20 @@ export default function LoginForm() {
       </div>
       <div className="flex-[1] hidden lg:block" />
       <div className="flex-[4] justify-start lg:w-[35%] min-w-[340px] lg:min-w-[380px] w-[80%] flex flex-col items-stretch">
+        {error.general && (
+          <span className="absolute -mt-12 px-3 my-3 text-red-600 py-1 bg-gray-100 border border-gray-300 rounded-md self-center">
+            {error.general}
+          </span>
+        )}
         <TextInput
           onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
           value={username}
           name="username"
           placeholder="E-Posta"
-          type="text"
+          type="email"
           required={true}
-          autoComplete="off"
+          errors={error.username}
+          autoComplete="on"
         />
         <Seperator />
         <TextInput
@@ -58,15 +87,18 @@ export default function LoginForm() {
           value={password}
           name="password"
           placeholder="Şifre"
-          type="email"
+          type="password"
           required={true}
-          autoComplete="off"
+          errors={error.password}
+          autoComplete="on"
         />
         <Seperator />
         <Checkbox />
         <Seperator />
         <div className="flex-[1] flex flex-col justify-start items-stretch">
-          <Button type="submit">Giriş Yap</Button>
+          <Button disabled={isLoading} isLoading={isLoading} type="submit">
+            Giriş Yap
+          </Button>
         </div>
       </div>
     </form>
