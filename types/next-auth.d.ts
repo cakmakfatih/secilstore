@@ -30,7 +30,6 @@ declare module 'next-auth' {
     user: UserObject;
     validity: AuthValidity;
     tokens: Tokens;
-    error?: SuccessResponse | InvalidFieldsResponse | InvalidCredentialsResponse | string;
   }
 
   interface SuccessResponse {

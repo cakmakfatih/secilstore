@@ -11,6 +11,8 @@ import NextAuth, {
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+const signInRequest = async (credentials: Record<'username' | 'password', string>) => {};
+
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -114,8 +116,34 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-async function refreshAccessToken(token: JWT): Promise<JWT> {
-  throw new Error('unimplemented');
+async function refreshAccessToken(nextAuthJWT: JWT): Promise<JWT> {
+  const response = await fetch('https://maestro-api-dev.secil.biz/Auth/RefreshTokenLogin', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      refreshToken: nextAuthJWT.data.tokens.refresh,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Refresh token not valid');
+  }
+
+  const result: SuccessResponse = await response.json();
+
+  const { accessToken, refreshToken, expiresIn, refreshExpiresIn } = result.data;
+  const validity: AuthValidity = {
+    valid_until: Date.now() + expiresIn * 1000,
+    refresh_until: Date.now() + refreshExpiresIn * 1000,
+  };
+
+  nextAuthJWT.data.validity = { ...validity };
+  nextAuthJWT.data.tokens.access = accessToken;
+  nextAuthJWT.data.tokens.refresh = refreshToken;
+
+  return { ...nextAuthJWT };
 }
 
 const handler = NextAuth(authOptions);
