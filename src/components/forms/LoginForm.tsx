@@ -50,6 +50,8 @@ export default function LoginForm() {
     setIsLoading(false);
   };
 
+  const btnDisabled = isLoading || username === '' || password === '';
+
   return (
     <div className="border-color-form lg:border rounded-md flex-1 self lg:max-w-[792px] lg:max-h-[867px] lg:h-[85%] w-[80%] flex self-center items-center justify-center flex-col">
       <div className="flex-[2] hidden lg:block" />
@@ -94,7 +96,7 @@ export default function LoginForm() {
         <Checkbox />
         <Seperator />
         <div className="flex-[1] flex flex-col justify-start items-stretch">
-          <Button disabled={isLoading} isLoading={isLoading} onClick={login}>
+          <Button disabled={btnDisabled} isLoading={isLoading} onClick={login}>
             Giriş Yap
           </Button>
         </div>
