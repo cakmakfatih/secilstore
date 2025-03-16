@@ -1,50 +1,44 @@
-export type ConstantFilter = {
-  id: string;
-  title: string;
-  value: string;
-  valueName: string | null;
-  currency: string | null;
-  comparisonType: number;
-};
+export interface CollectionResponse {
+  meta: PaginationMeta;
+  data: Collection[];
+}
 
-export type ConstantFilters = {
-  useOrLogic: boolean;
-  filters: ConstantFilter[];
-};
-
-export type ConstantInfo = {
-  id: number;
-  name: string;
-  description: string;
-  url: string;
-  langCode: string;
-};
-
-export type ConstantItem = {
-  id: number;
-  filters: ConstantFilters;
-  type: number;
-  info: ConstantInfo;
-  salesChannelId: number;
-  products: any | null;
-};
-
-export type ConstantMeta = {
+export interface PaginationMeta {
   page: number;
   pageSize: number;
   totalCount: number;
   totalPages: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
-};
+}
 
-export type SuccessfulConstantsResponse = {
-  meta: ConstantMeta;
-  data: ConstantItem[];
-};
+export interface Collection {
+  id: number;
+  filters: FilterGroup;
+  type: number;
+  info: CollectionInfo;
+  salesChannelId: number;
+  products: null;
+}
 
-export type FailedResponse = {
-  message: string;
-};
+export interface FilterGroup {
+  useOrLogic: boolean;
+  filters: Filter[];
+}
 
-export type ConstantsResponse = SuccessfulConstantsResponse | FailedResponse;
+export interface Filter {
+  id: string;
+  title: string;
+  value: string;
+  valueName: string;
+  currency: null | string;
+  comparisonType: number;
+}
+
+export interface CollectionInfo {
+  id: number;
+  name: string;
+  description: string;
+  url: string;
+  langCode: string;
+}

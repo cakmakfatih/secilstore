@@ -1,9 +1,9 @@
-import { ConstantItem, ConstantMeta } from '@/lib/types';
+import { Collection, CollectionResponse, PaginationMeta } from '@/lib/types';
 import { createStore } from 'zustand';
 
 export type ConstantStoreItem = {
-  meta: ConstantMeta;
-  data: ConstantItem[];
+  meta: PaginationMeta;
+  data: Collection[];
 };
 
 export type CollectionsState = {
@@ -15,7 +15,7 @@ export type CollectionsState = {
 
 export type CollectionsActions = {
   setIsFetchingConstants: (isFetching: boolean) => void;
-  addConstantsPage: ({ meta, data }: { meta: ConstantMeta; data: ConstantItem[] }) => void;
+  addConstantsPage: ({ meta, data }: { meta: PaginationMeta; data: Collection[] }) => void;
   setConstantsCurrentPage: (page: number) => void;
   setConstantsTotalPages: (page: number) => void;
 };

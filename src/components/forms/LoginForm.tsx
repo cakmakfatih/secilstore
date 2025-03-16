@@ -25,8 +25,7 @@ export default function LoginForm() {
     setIsLoading,
   } = useLoginStore(state => state);
 
-  const login = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const login = async () => {
     setIsLoading(true);
 
     const authResult = await signIn('credentials', {

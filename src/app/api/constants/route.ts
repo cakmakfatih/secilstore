@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { ConstantsResponse } from '@/lib/types';
+import { CollectionResponse } from '@/lib/types';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const secret = process.env.NEXTAUTH_SECRET ?? '';
 
-export async function GET(req: NextRequest): Promise<NextResponse<ConstantsResponse>> {
+export async function GET(req: NextRequest) {
   const token = await getToken({ req, secret });
 
   if (!token) {
     return NextResponse.json(
       {
-        message: 'unauthorized',
+        message: 'unexpected error',
       },
       {
         status: 401,
@@ -18,12 +19,16 @@ export async function GET(req: NextRequest): Promise<NextResponse<ConstantsRespo
     );
   }
 
-  const page = req.nextUrl.searchParams.get('page') ?? 1;
+  const page = req.nextUrl.searchParams.get('page');
   const accessToken = token.data.tokens.access;
   const response = await fetch('https://maestro-api-dev.secil.biz/Collection/GetAll?page=' + page, {
+    cache: 'no-cache',
     headers: {
       Authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip, deflate, br',
+      Accept: '*/*',
+      Host: 'https://maestro-api-dev.secil.biz',
     },
   });
 
@@ -32,15 +37,14 @@ export async function GET(req: NextRequest): Promise<NextResponse<ConstantsRespo
       {
         message: 'Beklenmedik bir hata oluştu.',
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
-  const json = await response.json();
-  return NextResponse.json(json, {
-    status: 200,
-  });
+  const json: CollectionResponse = await response.json();
+  return NextResponse.json(
+    {
+      ...json,
+    },
+    { status: 200 }
+  );
 }
-
-export const dynamic = 'force-dynamic';
