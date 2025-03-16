@@ -6,4 +6,4 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ['/collections(.*)'] };
+export const config = { matcher: ['/collections(.*)', '/api/collections(.*)'] };

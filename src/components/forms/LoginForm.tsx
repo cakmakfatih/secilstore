@@ -6,7 +6,7 @@ import Seperator from '../shared/Seperator';
 import TextInput from '../shared/TextInput';
 import Checkbox from '../shared/Checkbox';
 import { signIn } from 'next-auth/react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { useLoginStore } from '@/providers/LoginStoreProvider';
 import { isGeneralError, isInvalidFieldsError } from '@/lib/helpers';
 import { useRouter } from 'next/navigation';
@@ -25,8 +25,7 @@ export default function LoginForm() {
     setIsLoading,
   } = useLoginStore(state => state);
 
-  const login = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const login = async () => {
     setIsLoading(true);
 
     const authResult = await signIn('credentials', {
@@ -52,10 +51,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form
-      onSubmit={login}
-      className="border-color-form lg:border rounded-md flex-1 self lg:max-w-[792px] lg:max-h-[867px] lg:h-[85%] w-[80%] flex self-center items-center justify-center flex-col"
-    >
+    <div className="border-color-form lg:border rounded-md flex-1 self lg:max-w-[792px] lg:max-h-[867px] lg:h-[85%] w-[80%] flex self-center items-center justify-center flex-col">
       <div className="flex-[2] hidden lg:block" />
       <div className="flex-[1] flex justify-center items-center">
         <Image
@@ -81,7 +77,7 @@ export default function LoginForm() {
           type="email"
           required={true}
           errors={error.username}
-          autoComplete="on"
+          autoComplete="off"
         />
         <Seperator />
         <TextInput
@@ -92,17 +88,17 @@ export default function LoginForm() {
           type="password"
           required={true}
           errors={error.password}
-          autoComplete="on"
+          autoComplete="off"
         />
         <Seperator />
         <Checkbox />
         <Seperator />
         <div className="flex-[1] flex flex-col justify-start items-stretch">
-          <Button disabled={isLoading} isLoading={isLoading} type="submit">
+          <Button disabled={isLoading} isLoading={isLoading} onClick={login}>
             Giriş Yap
           </Button>
         </div>
       </div>
-    </form>
+    </div>
   );
 }

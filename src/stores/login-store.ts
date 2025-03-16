@@ -7,12 +7,6 @@ export type LoginError = {
   password: string[];
 };
 
-const noError = {
-  general: '',
-  username: [],
-  password: [],
-};
-
 export type LoginState = {
   username: string;
   password: string;
