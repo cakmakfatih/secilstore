@@ -79,7 +79,7 @@ export default function LoginForm() {
     setUsername(rememberedUsername);
     setPassword(rememberedPassword);
     setRememberUser(true);
-  }, []);
+  }, [setUsername, setRememberUser, setPassword]);
 
   const btnDisabled = isLoading || username === '' || password === '';
 
