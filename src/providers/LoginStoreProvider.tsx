@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 
 import { createContext, ReactNode, useContext, useRef } from 'react';

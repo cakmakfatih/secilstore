@@ -6,7 +6,7 @@ import Seperator from '../shared/Seperator';
 import TextInput from '../shared/TextInput';
 import Checkbox from '../shared/Checkbox';
 import { signIn } from 'next-auth/react';
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent } from 'react';
 import { useLoginStore } from '@/providers/LoginStoreProvider';
 import { isGeneralError, isInvalidFieldsError } from '@/lib/helpers';
 import { useRouter } from 'next/navigation';

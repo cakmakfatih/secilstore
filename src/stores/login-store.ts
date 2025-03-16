@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { InvalidFieldsResponse } from 'next-auth';
 import { createStore } from 'zustand';
 

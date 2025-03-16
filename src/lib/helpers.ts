@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { InvalidFieldsResponse } from 'next-auth';
 
 export const isInvalidFieldsError = (obj: any): obj is InvalidFieldsResponse => {

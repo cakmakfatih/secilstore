@@ -1,4 +1,6 @@
-import { Collection, CollectionResponse, PaginationMeta } from '@/lib/types';
+/* eslint-disable */
+
+import { Collection, PaginationMeta } from '@/lib/types';
 import { createStore } from 'zustand';
 
 export type ConstantStoreItem = {

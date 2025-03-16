@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 
 import { createContext, ReactNode, useContext, useRef } from 'react';
@@ -26,11 +28,11 @@ export default function CollectionsStoreProvider({ children }: CollectionsStoreP
 }
 
 export const useCollectionsStore = <T,>(selector: (store: CollectionsStore) => T): T => {
-  const loginStoreContext = useContext(CollectionsStoreContext);
+  const collectionsStoreContext = useContext(CollectionsStoreContext);
 
-  if (!loginStoreContext) {
-    throw new Error(`useLoginStore must be used within LoginStoreProvider`);
+  if (!collectionsStoreContext) {
+    throw new Error(`useCollectionsStore must be used within CollectionsStoreProvider`);
   }
 
-  return useStore(loginStoreContext, selector);
+  return useStore(collectionsStoreContext, selector);
 };

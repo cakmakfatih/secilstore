@@ -36,36 +36,45 @@ export default function CollectionsPage() {
     setConstantsCurrentPage,
     setConstantsTotalPages,
   } = useCollectionsStore(state => state);
-  const addToConstantsFn = async (page: number) => {
-    if (page !== 1 && page > constantsTotalPages) {
-      return;
-    }
 
-    setConstantsCurrentPage(page);
-    if (constantItems.find(item => item.meta.page !== page) !== undefined) {
-      return;
-    }
+  const addToConstants = useCallback(
+    async (page: number) => {
+      if (page !== 1 && page > constantsTotalPages) {
+        return;
+      }
 
-    setIsFetchingConstants(true);
-    const response = await fetch('/api/constants?page=' + page, {
-      cache: 'no-store',
-      headers: {
-        Pragma: 'no-cache',
-      },
-    });
-    if (!response.ok) {
+      setConstantsCurrentPage(page);
+      if (constantItems.find(item => item.meta.page !== page) !== undefined) {
+        return;
+      }
+
+      setIsFetchingConstants(true);
+      const response = await fetch('/api/constants?page=' + page, {
+        cache: 'no-store',
+        headers: {
+          Pragma: 'no-cache',
+        },
+      });
+      if (!response.ok) {
+        setIsFetchingConstants(false);
+        return;
+      }
+
+      const result: CollectionResponse = await response.json();
+
+      setConstantsTotalPages(result.meta.totalPages);
+      addConstantsPage({ meta: result.meta, data: result.data });
       setIsFetchingConstants(false);
-      return;
-    }
-
-    const result: CollectionResponse = await response.json();
-
-    setConstantsTotalPages(result.meta.totalPages);
-    addConstantsPage({ meta: result.meta, data: result.data });
-    setIsFetchingConstants(false);
-  };
-
-  const addToConstants = useCallback((page: number) => addToConstantsFn(page), [addToConstantsFn]);
+    },
+    [
+      addConstantsPage,
+      constantItems,
+      constantsTotalPages,
+      setConstantsCurrentPage,
+      setConstantsTotalPages,
+      setIsFetchingConstants,
+    ]
+  );
   const currentItems: Collection[] =
     constantItems.find(i => i.meta.page === constantsCurrentPage)?.data ?? [];
 
@@ -73,7 +82,7 @@ export default function CollectionsPage() {
     if (constantsCurrentPage === 0) {
       addToConstants(1);
     }
-  }, []);
+  }, [addToConstants, constantsCurrentPage]);
 
   return (
     <>

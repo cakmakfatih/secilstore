@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { CollectionResponse } from '@/lib/types';
-import { NextApiRequest, NextApiResponse } from 'next';
 
 const secret = process.env.NEXTAUTH_SECRET ?? '';
 

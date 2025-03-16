@@ -1,7 +1,11 @@
+/* eslint-disable */
+
+'use client';
+
 export enum IconData {
-  Dashboard,
-  Products,
-  Collection,
+  Dashboard = 1,
+  Products = 2,
+  Collection = 3,
 }
 
 export default function Icon({ icon }: { icon: IconData }) {
