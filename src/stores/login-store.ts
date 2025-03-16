@@ -14,6 +14,7 @@ export type LoginState = {
   password: string;
   error: LoginError;
   isLoading: boolean;
+  rememberUser: boolean;
 };
 
 export type LoginActions = {
@@ -22,6 +23,7 @@ export type LoginActions = {
   setFieldErrors: (fieldErrResponse: InvalidFieldsResponse) => void;
   setGeneralError: (errMessage: string) => void;
   setIsLoading: (isLoading: boolean) => void;
+  setRememberUser: (remember: boolean) => void;
 };
 
 export type LoginStore = LoginState & LoginActions;
@@ -35,6 +37,7 @@ export const defaultState: LoginState = {
     password: [],
   },
   isLoading: false,
+  rememberUser: false,
 };
 
 export const createLoginStore = (initialState: LoginState = defaultState) => {
@@ -60,5 +63,6 @@ export const createLoginStore = (initialState: LoginState = defaultState) => {
         },
       })),
     setIsLoading: (isLoading: boolean) => set(state => ({ ...state, isLoading })),
+    setRememberUser: (remember: boolean) => set(state => ({ ...state, rememberUser: remember })),
   }));
 };
