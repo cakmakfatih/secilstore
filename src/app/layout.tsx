@@ -15,7 +15,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="tr">
-      <body className={`${poppins.className} antialiased absolute w-dvw h-dvh overflow-x-hidden`}>
+      <body
+        className={`${poppins.className} antialiased absolute w-dvw h-dvh overflow-x-hidden min-h-0`}
+      >
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

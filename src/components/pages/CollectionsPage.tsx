@@ -27,6 +27,7 @@ const ListItem = ({ item }: { item: Collection }) => {
 
 export default function CollectionsPage() {
   const {
+    isFetchingConstants,
     constantsCurrentPage,
     constantsTotalPages,
     constantItems,
@@ -83,9 +84,11 @@ export default function CollectionsPage() {
         <span className="flex-1 text-center">İşlemler</span>
       </div>
       <div className="flex flex-1 flex-col items-stretch mx-4 overflow-y-auto min-h-0">
-        {currentItems.map((i, idx) => (
-          <ListItem item={i} key={idx} />
-        ))}
+        {isFetchingConstants ? (
+          <div className="self-center">Loading</div>
+        ) : (
+          currentItems.map((i, idx) => <ListItem item={i} key={idx} />)
+        )}
       </div>
     </>
   );

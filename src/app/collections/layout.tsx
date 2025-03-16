@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <CollectionsStoreProvider>
-      <div className="flex flex-col antialiased absolute w-dvw h-dvh min-h-0">
+      <div className="flex flex-col antialiased absolute w-dvw h-dvh min-h-0 max-h-dvh">
         <Header />
         <Body>{children}</Body>
       </div>
