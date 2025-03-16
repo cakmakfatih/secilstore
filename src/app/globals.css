@@ -7,6 +7,7 @@
   --input-border-color-active: #424242;
   --input-border-color: #bdbdbd;
   --label-inactive-color: #757575;
+  --subheading-color: #858080;
 }
 
 @theme inline {
@@ -51,6 +52,10 @@ body {
 
 .inp-default:focus {
   color: var(--foreground);
+}
+
+.text-subheading {
+  color: var(--subheading-color);
 }
 
 @supports (-webkit-touch-callout: none) {

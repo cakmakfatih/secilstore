@@ -6,12 +6,11 @@ import NextAuth, {
   NextAuthOptions,
   SuccessResponse,
   Tokens,
+  User,
   UserObject,
 } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
-
-const signInRequest = async (credentials: Record<'username' | 'password', string>) => {};
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -69,13 +68,15 @@ export const authOptions: NextAuthOptions = {
           user,
           tokens,
           validity,
-        };
+        } as User;
       },
     }),
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 36000,
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
   },
   pages: {
     signIn: '/login',
@@ -89,26 +90,26 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
-    async jwt({ token, user, account }) {
-      if (user && account) {
-        return { ...token, data: user };
+    async jwt({ token, user }) {
+      if (user) {
+        token.data = {
+          user,
+          validity: user.validity,
+          tokens: user.tokens,
+        };
+      } else {
+        if (Date.now() < token.data.validity.valid_until) {
+          return token;
+        }
+
+        if (Date.now() < token.data.validity.refresh_until) {
+          return await refreshAccessToken(token);
+        }
+
+        return { ...token, error: 'RefreshTokenExpired' };
       }
 
-      if (Date.now() < token.data.validity.valid_until) {
-        return token;
-      }
-
-      if (Date.now() < token.data.validity.refresh_until) {
-        return await refreshAccessToken(token);
-      }
-
-      return { ...token, error: 'RefreshTokenExpired' };
-    },
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
-      else if (new URL(url).origin === baseUrl) return url;
-
-      return baseUrl;
+      return token;
     },
   },
 };

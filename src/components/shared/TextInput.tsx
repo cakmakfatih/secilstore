@@ -19,7 +19,7 @@ export default function TextInput({ errors = [], placeholder, ...rest }: TextInp
         'flex flex-col items-stretch border rounded-lg',
         isFocused ? 'border-color-input-active' : 'border-color-input',
       ].join(' '),
-    [isFocused]
+    [isFocused, inpRef.current?.value]
   );
   const labelStyles = useMemo(
     () =>
@@ -28,7 +28,7 @@ export default function TextInput({ errors = [], placeholder, ...rest }: TextInp
         (isFocused || !!inpRef.current?.value) && '-translate-y-5.5 text-sm',
         !isFocused && 'text-label-inactive',
       ].join(' '),
-    [isFocused]
+    [isFocused, inpRef.current?.value]
   );
 
   return (

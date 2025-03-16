@@ -13,6 +13,7 @@ declare module 'next-auth' {
   }
 
   interface UserObject {
+    id: string;
     name: string;
     preferred_username: string;
     given_name: string;
@@ -59,15 +60,6 @@ declare module 'next-auth' {
         Password?: string[];
       };
     };
-  }
-}
-
-declare module 'next-auth/react' {
-  interface SignInResponse {
-    ok: boolean;
-    error: InvalidCredentialsResponse | InvalidFieldsResponse | string | null;
-    status: number;
-    url: string;
   }
 }
 
